@@ -19,6 +19,8 @@ def speak_text(input_data: str) -> None:
 
 
 def search_synonym(query: str) -> None:
+    speak_text(f'Парсинг по слову {query}')
+
     synonyms_html = get(f'https://sinonim.org/s/{query}#f', headers=headers)
     parse = BeautifulSoup(synonyms_html.text, 'html.parser')
 
@@ -59,10 +61,13 @@ def search_synonym(query: str) -> None:
 
 def listen() -> None:
     recognazer = speech_rec.Recognizer()
+    speak_text('Говорите')
     with speech_rec.Microphone() as source:
         recognazer.pause_threshold = 0.5
         recognazer.adjust_for_ambient_noise(source)
         audio = recognazer.listen(source)
+
+    speak_text('Идет распознование речи')
 
     try:
         task = recognazer.recognize_google(audio, language='ru-RU').lower()
@@ -73,7 +78,7 @@ def listen() -> None:
     return task
 
 def processing_commands(task) -> None:
-    print(task)
+    search_synonym(task)
 
 while True:
     processing_commands(listen())
