@@ -11,7 +11,6 @@ voices = engine.getProperty('voices')
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.167 YaBrowser/22.7.3.822 Yowser/2.5 Safari/537.36'}
 
 
-
 def speak_text(input_data: str) -> None:
     engine.say(input_data)
     engine.runAndWait()
@@ -62,6 +61,7 @@ def search_synonym(query: str) -> None:
 def listen() -> None:
     recognazer = speech_rec.Recognizer()
     speak_text('Говорите')
+
     with speech_rec.Microphone() as source:
         recognazer.pause_threshold = 0.5
         recognazer.adjust_for_ambient_noise(source)
@@ -72,7 +72,7 @@ def listen() -> None:
     try:
         task = recognazer.recognize_google(audio, language='ru-RU').lower()
     except speech_rec.UnknownValueError:
-        speak_text('че')
+        speak_text('Прозошла ошибка распознования речи')
         task = listen()
 
     return task
